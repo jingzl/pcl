@@ -1,4 +1,92 @@
-﻿#include <iostream>
+﻿/*
+#include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/io/pcd_io.h>
+
+using pcl::PointCloud;
+using pcl::PointXYZ;
+
+int
+main(int, char**)
+{
+	srand(unsigned(time(0)));
+
+	PointCloud<PointXYZ>::Ptr cloud(new PointCloud<PointXYZ>);
+
+	cloud->points.resize(5);
+	for (std::size_t i = 0; i < cloud->size(); ++i)
+	{
+		(*cloud)[i].x = float(i);
+		(*cloud)[i].y = float(i / 2);
+		(*cloud)[i].z = 0.0f;
+	}
+
+	// Start the visualizer
+	pcl::visualization::PCLVisualizer p("test_shapes");
+	p.setBackgroundColor(1, 1, 1);
+	p.addCoordinateSystem(1.0, "first");
+
+	//p.addPolygon (cloud, "polygon");
+	p.addPolygon<PointXYZ>(cloud, 1.0, 0.0, 0.0, "polygon", 0);
+	p.setShapeRenderingProperties(pcl::visualization::PCL_VISUALIZER_LINE_WIDTH, 10, "polygon");
+
+	p.addLine<PointXYZ, PointXYZ>((*cloud)[0], (*cloud)[1], 0.0, 1.0, 0.0);
+	p.setShapeRenderingProperties(pcl::visualization::PCL_VISUALIZER_LINE_WIDTH, 50, "line");
+
+	p.addSphere<PointXYZ>((*cloud)[0], 1, 0.0, 1.0, 0.0);
+	p.setShapeRenderingProperties(pcl::visualization::PCL_VISUALIZER_LINE_WIDTH, 5, "sphere");
+	//  p.removePolygon ("poly");
+
+	p.addText("text", 200, 200, 1.0, 0, 0, "text");
+
+	p.addText3D("text3D", (*cloud)[0], 1.0, 1.0, 0.0, 0.0);
+	p.spin();
+	p.removeCoordinateSystem("first", 0);
+	p.spin();
+	p.addCoordinateSystem(1.0, 5, 3, 1, "second");
+	p.spin();
+	p.removeCoordinateSystem("second", 0);
+	p.spin();
+}
+*/
+
+#include<pcl/visualization/cloud_viewer.h>
+#include<iostream>//标准C++库中的输入输出类相关头文件。
+#include<pcl/io/io.h>
+#include<pcl/io/pcd_io.h>//pcd 读写类相关的头文件。
+#include<pcl/io/ply_io.h>
+#include<pcl/point_types.h> //PCL中支持的点类型头文件。
+
+
+using namespace std;
+using namespace pcl;
+
+
+void viewerOneOff(visualization::PCLVisualizer& viewer) {
+	viewer.setBackgroundColor(0, 0, 0);   //设置背景颜色为黑色
+}
+
+int main() {
+
+	PointCloud<PointXYZ>::Ptr cloud(new PointCloud<PointXYZ>);
+
+	char strfilepath[256] = "rabbit.pcd";
+	if (-1 == io::loadPCDFile(strfilepath, *cloud)) {
+		cout << "error input!" << endl;
+		return -1;
+	}
+
+	cout << cloud->points.size() << endl;
+	visualization::CloudViewer viewer("Cloud Viewer: Rabbit");     //创建viewer对象
+
+	viewer.showCloud(cloud);
+	viewer.runOnVisualizationThreadOnce(viewerOneOff);
+	system("pause");
+	return 0;
+}
+
+
+/*
+#include <iostream>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 
@@ -21,7 +109,7 @@ int  main(int argc, char** argv)
 		std::cerr << "    " << cloud.points[i].x << " " << cloud.points[i].y << " " << cloud.points[i].z << std::endl;
 	return (0);
 }
-
+*/
 
 
 /*
